@@ -7,19 +7,23 @@ use App\Http\Requests\RatingFormRequest;
 use App\News;
 use App\Photo;
 use Illuminate\Http\JsonResponse;
+use App\Like;
 
 class RatingController extends Controller
 {
+    
+    public const DIRECTION_INCREMENT = 'increment';
+    public const DIRECTION_DECREMENT = 'decrement';
     
     /**
      * @param  RatingFormRequest  $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function inc(RatingFormRequest $request): JsonResponse
+    public function like(RatingFormRequest $request): JsonResponse
     {
         try {
-            $this->process($request, 'increment');
+            $this->process($request, self::DIRECTION_INCREMENT);
         } catch (\Throwable $e) {
             error_log($e->getMessage() . "\n" . $e->getTraceAsString());
             
@@ -34,10 +38,10 @@ class RatingController extends Controller
      *
      * @return JsonResponse
      */
-    public function dec(RatingFormRequest $request): JsonResponse
+    public function dislike(RatingFormRequest $request): JsonResponse
     {
         try {
-            $this->process($request, 'decrement');
+            $this->process($request, self::DIRECTION_DECREMENT);
         } catch (\Throwable $e) {
             error_log($e->getMessage() . "\n" . $e->getTraceAsString());
             
@@ -55,6 +59,8 @@ class RatingController extends Controller
     {
         $type = $request->post('type');
         $id   = $request->post('id');
+        $like = Like::firstOrNew(['record_id' => $id, 'type' => $type]);
+        
         /** @var null|News|Photo $model */
         $model = null;
         switch ($type) {
@@ -67,7 +73,12 @@ class RatingController extends Controller
         }
         if ($model !== null) {
             $model->$direction('rating');
+            
+            $like->login     = $this->user->name;
+            $like->direction = $direction === self::DIRECTION_INCREMENT ? Like::UP : Like::DOWN;
+            
             $model->save();
+            $like->save();
         }
     }
     

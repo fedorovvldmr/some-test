@@ -15,7 +15,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     public const STATUS_OK    = 1;
-    public const STATUS_ERROR = 1;
+    public const STATUS_ERROR = 0;
     //
     /** @var User */
     protected $user;

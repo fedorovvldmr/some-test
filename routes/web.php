@@ -23,8 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/photos/create', 'PhotoController@create')->name('photos.create');
     
     Route::namespace('Ajax')->prefix('ajax')->name('ajax')->group(function () {
-        Route::post('/rating/inc', 'RatingController@inc');
-        Route::post('/rating/dec', 'RatingController@dec');
+        Route::post('/rating/like', 'RatingController@like');
+        Route::post('/rating/dislike', 'RatingController@dislike');
         
         Route::get('/news/delete/{id}', 'NewsController@delete')->name('news.delete');
         Route::post('/news/create', 'NewsController@createOrEdit')->name('news.create');

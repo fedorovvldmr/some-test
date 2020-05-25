@@ -14,5 +14,5 @@ php artisan db:seed
 #### Тестовый пользователь
 ```
 some_user@gmail.com
-somw_password
+some_password
 ```

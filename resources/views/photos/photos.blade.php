@@ -29,11 +29,13 @@
     </div>
 
     <div v-else>
-        <div v-for="photo in photoList" class="mb-4">
+        <div v-for="(photo, index) in photoList" class="mb-4">
             <h2 v-text="photo.title"></h2>
             <img :src="photo.src" :alt="photo.title">
+            <div>&#128587; <span v-text="photo.login"></span></div>
+
             <div class="my-3 d-flex justify-content-between">
-                <div>&#128587; <span v-text="photo.login"></span></div>
+                <rating v-model="photoList[index]" :type="'photo'" class="mb-3 mb-md-0"></rating>
 
                 <div>
                     <button class="btn" @click="removePhoto(photo.id)">Удалить &#10060;</button>

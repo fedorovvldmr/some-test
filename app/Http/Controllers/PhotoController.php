@@ -14,7 +14,15 @@ class PhotoController extends Controller
         $photos = [];
         /** @var Photo $photo */
         foreach (Photo::all() as $photo) {
-            $photos[$photo->id] = $photo;
+            $photos[$photo->id] = [
+                'id'            => $photo->id,
+                'title'         => $photo->title,
+                'src'           => $photo->src,
+                'login'         => $photo->login,
+                'rating'        => $photo->rating,
+                'likes_from'    => array_column($photo->likes->toArray(), 'login'),
+                'dislikes_from' => array_column($photo->dislikes->toArray(), 'login'),
+            ];
         }
         
         return $this->view('photos.photos', ['title' => 'Фото', 'photoList' => $photos]);

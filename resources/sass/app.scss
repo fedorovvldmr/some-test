@@ -11,3 +11,35 @@
 img {
     max-width: 100%;
 }
+
+.who-rated {
+    display:       none;
+    position:      absolute;
+    top:           calc(100% + 7px);
+    left:          0;
+    background:    white;
+    border-radius: 5px;
+    padding:       0.5rem;
+    max-width:     300px;
+    max-height:    300px;
+    border:        1px solid lightgray;
+    
+    &:before {
+        content:     '';
+        width:       10px;
+        height:      10px;
+        position:    absolute;
+        top:         -6px;
+        left:        10px;
+        background:  white;
+        border-top:  1px solid lightgray;
+        border-left: 1px solid lightgray;
+        transform:   rotate(45deg);
+    }
+}
+
+.btn-rate:hover {
+    .who-rated {
+        display: block;
+    }
+}

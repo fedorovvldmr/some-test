@@ -17,6 +17,7 @@ import {BNavbar, BCollapse, BNavbarNav, BNavItem} from 'bootstrap-vue';
 import Rating                                     from './components/Rating';
 import {VueEditor}                                from 'vue2-editor';
 import NewsForm                                   from './components/NewsForm';
+import WhoRated                                   from './directives/WhoRated';
 
 Vue.component('b-navbar', BNavbar);
 Vue.component('b-collapse', BCollapse);
@@ -26,6 +27,8 @@ Vue.component(Rating.name, Rating);
 Vue.component('vue-editor', VueEditor);
 Vue.component(NewsForm.name, NewsForm);
 
+Vue.directive('whorated', WhoRated);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -33,11 +36,12 @@ Vue.component(NewsForm.name, NewsForm);
  */
 
 Vue.prototype.$direction   = {
-    inc: 'inc',
-    dec: 'dec',
+    like:    'like',
+    dislike: 'dislike',
 };
 Vue.prototype.STATUS_OK    = 1;
 Vue.prototype.STATUS_ERROR = 0;
+Vue.prototype.$user        = user || '';
 
 const app = new Vue({
     el: '#app',

@@ -3,18 +3,25 @@
         <div class="mb-2">Текущий рейтинг <b v-text="$props.value.rating"></b></div>
         
         <div class="btn-group">
-            <button
-                type="button"
-                @click="rating($direction.inc, $props.type, $props.value.id)"
-                class="btn btn-success"
-            >Ничего не понял, но круто &#128077;
-            </button>
-            <button
-                type="button"
-                @click="rating($direction.dec, $props.type, $props.value.id)"
-                class="btn btn-danger"
-            >Плохо &#128078;
-            </button>
+            <div class="btn-rate mr-2" v-whorated="$props.value.likes_from">
+                <button
+                    type="button"
+                    @click="rating($direction.like, $props.type, $props.value.id)"
+                    class="btn btn-success"
+                    :disabled="$props.value.likes_from.includes($user)"
+                >Ничего не понял, но круто &#128077;
+                </button>
+            </div>
+            
+            <div class="btn-rate" v-whorated="$props.value.dislikes_from">
+                <button
+                    type="button"
+                    @click="rating($direction.dislike, $props.type, $props.value.id)"
+                    class="btn btn-danger"
+                    :disabled="$props.value.dislikes_from.includes($user)"
+                >Плохо &#128078;
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -47,10 +54,24 @@
                     if(data.status === this.STATUS_OK) {
                         let data = this.$props.value;
                         
-                        if(direction === this.$direction.inc) {
+                        if(direction === this.$direction.like) {
                             data.rating++;
+                            
+                            if(!data.likes_from.includes(this.$user)) {
+                                data.likes_from.push(this.$user);
+                            }
+                            if(data.dislikes_from.includes(this.$user)) {
+                                data.dislikes_from.splice(data.dislikes_from.indexOf(this.$user), 1);
+                            }
                         } else {
                             data.rating--;
+                            
+                            if(!data.dislikes_from.includes(this.$user)) {
+                                data.dislikes_from.push(this.$user);
+                            }
+                            if(data.likes_from.includes(this.$user)) {
+                                data.likes_from.splice(data.likes_from.indexOf(this.$user), 1);
+                            }
                         }
                         
                         this.$emit('input', data);
@@ -60,6 +81,8 @@
                         alert('Произошло что-то плохое(');
                     }
                 }).catch(error => {
+                    console.error(error);
+                    
                     alert('Произошло что-то плохое(');
                 });
             },

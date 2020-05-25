@@ -44,7 +44,10 @@
 </div>
 
 @push('scripts')
-    <script>window.title = '{{ $title ?? '' }}';</script>
+    <script>
+        window.title = '{{ $title ?? '' }}';
+        window.user  = '{{ $user->name ?? '' }}';
+    </script>
 @endpush
 
 @stack('scripts')
