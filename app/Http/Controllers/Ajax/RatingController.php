@@ -59,7 +59,14 @@ class RatingController extends Controller
     {
         $type = $request->post('type');
         $id   = $request->post('id');
+        
+        /** @var Like $like */
         $like = Like::firstOrNew(['record_id' => $id, 'type' => $type]);
+        $condition = !empty($like->id);
+        $condition = $condition && $like->direction === ($direction === self::DIRECTION_INCREMENT ? Like::UP : Like::DOWN);
+        if ($condition) {
+            throw new \Exception('you voted earlier');
+        }
         
         /** @var null|News|Photo $model */
         $model = null;
